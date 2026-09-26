@@ -139,8 +139,10 @@ function moveNoButton(e) {
   dodgeCount++;
   dodgeCountSpan.textContent = dodgeCount;
 
-  // Make the Yes button grow bigger each dodge!
-  const scaleIncrease = Math.min(1 + dodgeCount * 0.09, 2.3);
+  // Make the Yes button grow bigger each dodge, safely capped for mobile screens
+  const isMobile = window.innerWidth <= 480;
+  const maxScale = isMobile ? 1.65 : 2.25;
+  const scaleIncrease = Math.min(1 + dodgeCount * 0.08, maxScale);
   yesBtn.style.transform = `scale(${scaleIncrease})`;
 
   // Update speech bubble with a random message
@@ -156,18 +158,27 @@ function moveNoButton(e) {
     noBtn.classList.add("teleporting");
   }
 
-  const btnWidth = noBtn.offsetWidth || 120;
-  const btnHeight = noBtn.offsetHeight || 50;
-  const padding = 25;
+  const btnWidth = noBtn.offsetWidth || 110;
+  const btnHeight = noBtn.offsetHeight || 45;
+  const padding = isMobile ? 18 : 28;
 
-  const maxX = window.innerWidth - btnWidth - padding;
-  const maxY = window.innerHeight - btnHeight - padding;
+  // Use visualViewport if available to account for mobile address bars
+  const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
 
-  const randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
-  const randomY = Math.floor(Math.random() * (maxY - padding)) + padding;
+  const maxX = Math.max(padding, vw - btnWidth - padding);
+  const maxY = Math.max(padding, vh - btnHeight - padding);
 
-  noBtn.style.left = `${Math.max(padding, randomX)}px`;
-  noBtn.style.top = `${Math.max(padding, randomY)}px`;
+  let randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
+  let randomY = Math.floor(Math.random() * (maxY - padding)) + padding;
+
+  // Avoid top right corner where the sound toggle lives (48x48 + margins)
+  if (randomX > vw - 100 && randomY < 90) {
+    randomY += 80;
+  }
+
+  noBtn.style.left = `${randomX}px`;
+  noBtn.style.top = `${randomY}px`;
 }
 
 // Support desktop hover, mobile tap, click & pointer events
