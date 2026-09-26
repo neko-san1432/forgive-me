@@ -1,12 +1,11 @@
-// Cute pleading GIFs for the question screen
+// Cute pleading GIFs from local assets (no external network dependencies)
 const pleadingGifs = [
-  "https://media.tenor.com/7d7aH4uXgU8AAAAM/cat-sad.gif",
-  "https://media.tenor.com/o2xH87fXkksAAAAM/cat-crying.gif",
-  "https://media.tenor.com/9vD_vV5v0lAAAAAM/cry-sad.gif",
-  "https://media.tenor.com/Fw8_8H_5B6IAAAAM/tkthao219-bubududu.gif",
-  "https://media.tenor.com/0Fvdq6VvUqAAAAAM/cat-please.gif",
-  "https://media.tenor.com/tHqgU6x_VfAAAAAM/milk-and-mocha-bear-crying.gif",
-  "https://media.tenor.com/uP1Y2k58aRAAAAAM/sad-kitten.gif"
+  "./assets/cat1.gif",
+  "./assets/cat2.gif",
+  "./assets/cat3.gif",
+  "./assets/cat4.gif",
+  "./assets/cat5.gif",
+  "./assets/cat6.gif"
 ];
 
 // Fun pleading messages when trying to click "No"
@@ -44,28 +43,32 @@ const celebrateAgainBtn = document.getElementById("celebrate-again-btn");
 let dodgeCount = 0;
 let soundEnabled = true;
 
-// Web Audio API Synthesizer for cute sound effects
+// Web Audio API Synthesizer with safe autoplay handling
 let audioCtx = null;
 
-function initAudio() {
-  if (!audioCtx) {
+function unlockAudio() {
+  try {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (AudioContext) {
+    if (!audioCtx && AudioContext) {
       audioCtx = new AudioContext();
     }
-  }
-  if (audioCtx && audioCtx.state === "suspended") {
-    audioCtx.resume();
+    if (audioCtx && audioCtx.state === "suspended") {
+      audioCtx.resume().catch(() => {});
+    }
+  } catch (e) {
+    // Autoplay restrictions
   }
 }
 
+// Unlock audio on first real user gesture (click or tap)
+["click", "touchstart", "touchend", "pointerdown"].forEach((evt) => {
+  document.addEventListener(evt, unlockAudio, { once: true, passive: true });
+});
+
 // Play cute squeak / boing when "No" dodges
 function playBoingSound() {
-  if (!soundEnabled) return;
+  if (!soundEnabled || !audioCtx || audioCtx.state !== "running") return;
   try {
-    initAudio();
-    if (!audioCtx) return;
-
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
@@ -92,28 +95,36 @@ function playBoingSound() {
 // Play happy victory chime when "Yes" is clicked
 function playCelebrationChime() {
   if (!soundEnabled) return;
+  unlockAudio();
+  if (!audioCtx) return;
+
   try {
-    initAudio();
-    if (!audioCtx) return;
+    const playNotes = () => {
+      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const now = audioCtx.currentTime + idx * 0.11;
 
-    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
-    notes.forEach((freq, idx) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const now = audioCtx.currentTime + idx * 0.11;
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(freq, now);
 
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(0.28, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
-      gain.gain.setValueAtTime(0.28, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
 
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.36);
+      });
+    };
 
-      osc.start(now);
-      osc.stop(now + 0.36);
-    });
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume().then(playNotes).catch(() => {});
+    } else {
+      playNotes();
+    }
   } catch (e) {
     // Ignore audio error
   }
@@ -123,7 +134,7 @@ function playCelebrationChime() {
 soundBtn.addEventListener("click", () => {
   soundEnabled = !soundEnabled;
   soundIcon.textContent = soundEnabled ? "🔊" : "🔇";
-  if (soundEnabled) initAudio();
+  if (soundEnabled) unlockAudio();
 });
 
 // Teleport the "No" button to a random safe position within the viewport
@@ -133,7 +144,10 @@ function moveNoButton(e) {
     e.stopPropagation();
   }
 
-  initAudio();
+  // Only unlock on touch or click events (not hover) to adhere to browser autoplay policy
+  if (e && (e.type === "touchstart" || e.type === "click" || e.type === "pointerdown")) {
+    unlockAudio();
+  }
   playBoingSound();
 
   dodgeCount++;
@@ -188,7 +202,7 @@ noBtn.addEventListener("click", moveNoButton);
 
 // Yes Button Action -> Celebration Screen
 yesBtn.addEventListener("click", () => {
-  initAudio();
+  unlockAudio();
   playCelebrationChime();
 
   // Hide question screen and show celebration card
