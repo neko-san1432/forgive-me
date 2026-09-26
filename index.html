@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will You Forgive Me? 🥺💖</title>
+  <!-- Google Fonts for cute typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Floating background particles -->
+  <div class="hearts-container" id="hearts-container"></div>
+
+  <!-- Sound Toggle -->
+  <button id="sound-btn" class="sound-toggle" aria-label="Toggle Sound" title="Sound Effects">
+    <span id="sound-icon">🔊</span>
+  </button>
+
+  <main class="card-container">
+    <!-- Question Screen -->
+    <div class="card" id="question-card">
+      <div class="gif-wrapper">
+        <img
+          id="main-gif"
+          src="https://media.tenor.com/7d7aH4uXgU8AAAAM/cat-sad.gif"
+          alt="Cute pleading cat"
+        />
+      </div>
+
+      <h1 class="title" id="main-title">Will you forgive me? 🥺</h1>
+      <p class="subtitle" id="sub-message">
+        I am so, so sorry! I really miss you and promise to make it up to you! 👉👈
+      </p>
+
+      <!-- Speech Bubble for playful warnings when dodging "No" -->
+      <div class="plea-bubble" id="plea-bubble">
+        <span id="plea-text">Don't say no! 😭</span>
+      </div>
+
+      <div class="buttons-group" id="btn-group">
+        <button id="yes-btn" class="btn btn-yes">
+          Yes! 💖
+        </button>
+        <button id="no-btn" class="btn btn-no">
+          No 💔
+        </button>
+      </div>
+
+      <div class="counter-text" id="dodge-count-display">
+        "No" attempts: <span id="dodge-count">0</span> 🏃💨
+      </div>
+    </div>
+
+    <!-- Celebration Screen (hidden initially) -->
+    <div class="card hidden" id="celebration-card">
+      <div class="gif-wrapper">
+        <img
+          id="celebration-gif"
+          src="https://media.tenor.com/cE01n-Z7p9sAAAAM/milk-and-mocha-hug.gif"
+          alt="Happy hugging cute bears"
+        />
+      </div>
+
+      <h1 class="title celebration-title">YAAAY! Thank you! 🥰🎉</h1>
+      <p class="subtitle celebration-subtitle">
+        I knew you had the biggest, sweetest heart in the whole world! ❤️
+      </p>
+
+      <div class="reward-box">
+        <h3>Your Forgiveness Rewards:</h3>
+        <ul>
+          <li>✨ Unlimited hugs & forehead kisses</li>
+          <li>🧋 Boba / favorite sweet treats on me</li>
+          <li>💌 100% good behavior guarantee</li>
+          <li>👑 Princess/Prince treatment all week!</li>
+        </ul>
+      </div>
+
+      <button id="celebrate-again-btn" class="btn btn-yes pulse">
+        Send More Love! 💖
+      </button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
