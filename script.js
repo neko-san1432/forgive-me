@@ -1,12 +1,16 @@
-// Cute pleading GIFs from local assets (no external network dependencies)
+// Cute pleading & apology GIFs (100% apology/pleading kittens - no valentine text)
 const pleadingGifs = [
-  "./assets/cat1.gif",
-  "./assets/cat2.gif",
-  "./assets/cat3.gif",
-  "./assets/cat4.gif",
-  "./assets/cat5.gif",
-  "./assets/cat6.gif"
+  "./assets/cutie-cat.gif", // Sniffling, crying white kitten bowing down
+  "./assets/cat2.gif",      // Pleading white kitten with starry eyes
+  "./assets/peach-cat.gif", // Peach cat crying on a pillow
+  "./assets/cat3.gif"       // Grey cat in bed crying over phone
 ];
+
+// Pre-cache all dynamic images silently in the background (no console warnings)
+["./assets/cutie-cat.gif", "./assets/cat2.gif", "./assets/peach-cat.gif", "./assets/cat3.gif", "./assets/cat7.gif"].forEach((src) => {
+  const img = new Image();
+  img.src = src;
+});
 
 // Fun pleading messages when trying to click "No"
 const pleaMessages = [
@@ -45,15 +49,20 @@ let soundEnabled = true;
 
 // Web Audio API Synthesizer with safe autoplay handling
 let audioCtx = null;
+let audioUnlocked = false;
 
 function unlockAudio() {
+  if (audioUnlocked) return;
   try {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     if (!audioCtx && AudioContext) {
       audioCtx = new AudioContext();
     }
-    if (audioCtx && audioCtx.state === "suspended") {
-      audioCtx.resume().catch(() => {});
+    if (audioCtx) {
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+      }
+      audioUnlocked = true;
     }
   } catch (e) {
     // Autoplay restrictions
@@ -61,13 +70,13 @@ function unlockAudio() {
 }
 
 // Unlock audio on first real user gesture (click or tap)
-["click", "touchstart", "touchend", "pointerdown"].forEach((evt) => {
+["click", "touchstart", "touchend"].forEach((evt) => {
   document.addEventListener(evt, unlockAudio, { once: true, passive: true });
 });
 
 // Play cute squeak / boing when "No" dodges
 function playBoingSound() {
-  if (!soundEnabled || !audioCtx || audioCtx.state !== "running") return;
+  if (!soundEnabled || !audioUnlocked || !audioCtx || audioCtx.state !== "running") return;
   try {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
@@ -145,7 +154,7 @@ function moveNoButton(e) {
   }
 
   // Only unlock on touch or click events (not hover) to adhere to browser autoplay policy
-  if (e && (e.type === "touchstart" || e.type === "click" || e.type === "pointerdown")) {
+  if (e && (e.type === "touchstart" || e.type === "click")) {
     unlockAudio();
   }
   playBoingSound();
