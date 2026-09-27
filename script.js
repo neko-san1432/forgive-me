@@ -23,11 +23,11 @@ const pleaMessages = [
   "I'll send you 100 cute voice notes & selfies! 🎙️",
   "Time zones can't stop me from begging for forgiveness! ⏰",
   "What if I order you boba on Grab/UberEats? 🧋",
-  "I miss your face on FaceTime so much! 🥺",
+  "I promise 1ms replies to every single text! ⚡💬",
   "System Error: LDR lovers cannot stay mad across miles! 🚫",
   "Wrong button! Aim for the pink one! 👉💖",
   "I'll let you pick what we watch on our next Discord date! 🎬",
-  "Counting down the days till our next airport hug! ✈️🫂",
+  "Counting down the days till our next bus stop hug! 🚌🫂",
   "Distance is temporary, but my love for you is forever! 🌍❤️",
   "I promise to send sweet morning paragraphs every day! 💌"
 ];
