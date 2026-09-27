@@ -12,23 +12,24 @@ const pleadingGifs = [
   img.src = src;
 });
 
-// Fun pleading messages when trying to click "No"
+// Fun pleading messages themed around long-distance relationship (LDR) texts
 const pleaMessages = [
-  "Are you really sure? 🥺",
-  "Think about our sweet memories! 💭",
-  "What if I buy you your favorite boba? 🧋",
-  "I'll give you unlimited hugs & snacks! 🍪",
-  "Don't break my tiny heart! 💔",
-  "Look at my teary eyes! 🥹",
-  "System Error 404: 'No' is not permitted! 🚫",
-  "Wrong button! Aim for the pink one! 👉",
-  "I'll give you forehead kisses! 🌸",
-  "Pretty please with sprinkles on top? 🍨",
-  "I promise to be on my best behavior! 🤞",
-  "You have too kind of a heart to say no! 🥰",
-  "I'm not letting you click me! 🏃‍♂️💨",
-  "Have mercy on this poor soul! 😭",
-  "I'll do all your chores for a week! 🧹"
+  "Are you really leaving me on read? 🥺📱",
+  "What if I order food delivery to your house right now? 🍕",
+  "I'm hugging my pillow pretending it's you! 🧸",
+  "I'll fall asleep on call with you all night! 🌙",
+  "Don't leave me on delivered! 😭💔",
+  "Look at my teary face through the screen! 🥹",
+  "I'll send you 100 cute voice notes & selfies! 🎙️",
+  "Time zones can't stop me from begging for forgiveness! ⏰",
+  "What if I order you boba on Grab/UberEats? 🧋",
+  "I miss your face on FaceTime so much! 🥺",
+  "System Error: LDR lovers cannot stay mad across miles! 🚫",
+  "Wrong button! Aim for the pink one! 👉💖",
+  "I'll let you pick what we watch on our next Discord date! 🎬",
+  "Counting down the days till our next airport hug! ✈️🫂",
+  "Distance is temporary, but my love for you is forever! 🌍❤️",
+  "I promise to send sweet morning paragraphs every day! 💌"
 ];
 
 // DOM Elements
